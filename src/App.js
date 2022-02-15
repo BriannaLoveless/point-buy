@@ -1,24 +1,63 @@
 import React from 'react'
-// import PointBuySystem from './components/PointBuySystem'
-// import Bonus from './components/Bonus'
 import Chart from './components/Chart'
 import Counter from './components/Counter'
 import stats from './stats'
 
 export default function App(){
     let availablePoints = 27
-    // let stats = [8,8,8,8,8,8]
 
     const [squares, setSquares] = React.useState(stats)
+    
+    function increment(id){
+        setSquares(prevSquares => {
+            const newSquares = []
+            for(let i = 0; i < prevSquares.length; i++){
+                const currentSquare = prevSquares[i]
+                if(currentSquare.id === id && currentSquare.value < 15) {
+                    const updatedSquare = {
+                        ...currentSquare,
+                        value: currentSquare.value + 1
+                    }
+                    newSquares.push(updatedSquare)
+                } else {
+                    newSquares.push(currentSquare)
+                }
+            }
+            return newSquares
+        })
+    }
+
+    function decrement(id){
+        setSquares(prevSquares => {
+            const newSquares = []
+            for(let i = 0; i < prevSquares.length; i++){
+                const currentSquare = prevSquares[i]
+                if(currentSquare.id === id && currentSquare.value > 8) {
+                    const updatedSquare = {
+                        ...currentSquare,
+                        value: currentSquare.value - 1
+                    }
+                    newSquares.push(updatedSquare)
+                } else {
+                    newSquares.push(currentSquare)
+                }
+            }
+            return newSquares
+        })
+    }
 
     const squareElements = squares.map(square => (
         <Counter 
             key={square.id}
+            id={square.id}
             value={square.value}
             stat={square.stat}
+            increment={increment}
+            decrement={decrement}
 
         />
     ))
+
 
     return(
         <div className="d-flex flex-column justify-content-center align-items-center">
